@@ -4,7 +4,7 @@
 Name:           %{?scl_prefix}perl-threads
 Epoch:          1
 Version:        2.22
-Release:        451%{?dist}
+Release:        452%{?dist}
 Summary:        Perl interpreter-based threads
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/threads
@@ -57,6 +57,7 @@ This threading model has been deprecated, and was removed as of Perl 5.10.0.)
 %setup -q -n threads-%{base_version}
 %patch0 -p1
 chmod -x examples/*
+%{?scl:scl enable %{scl} '}perl -MConfig -i -pe %{?scl:'"}'%{?scl:"'}s{^#!/usr/bin/perl}{$Config{startperl}}%{?scl:'"}'%{?scl:"'} examples/*%{?scl:'}
 
 %build
 %{?scl:scl enable %{scl} '}perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 OPTIMIZE="$RPM_OPT_FLAGS" && make %{?_smp_mflags}%{?scl:'}
@@ -76,6 +77,9 @@ find $RPM_BUILD_ROOT -type f -name '*.bs' -size 0 -delete
 %{_mandir}/man3/*
 
 %changelog
+* Tue Mar 17 2020 Petr Pisar <ppisar@redhat.com> - 1:2.22-452
+- Normalize shebangs in the examples (bug #1813352)
+
 * Thu Jan 02 2020 Jitka Plesnikova <jplesnik@redhat.com> - 1:2.22-451
 - SCL
 
